@@ -11,6 +11,7 @@ function Main() {
 }
 
 const BandBanner = styled.div`
+  margin-bottom: 1rem;
   height: 5rem;
   background-color: #222222;
 `;
