@@ -1,29 +1,44 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { VscSearch } from 'react-icons/vsc';
+import BackGroundModal from './BackGroundModal';
+import UserModal from './UserModal';
 
 function Header() {
+  const [isOpened, setIsOpened] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+
+  const openModal = () => {
+    document.body.style.overflow = 'hidden';
+    setIsOpened((prev) => !prev);
+  };
+
+  const closeModal = () => {
+    document.body.style.overflow = 'auto';
+    setIsOpened((prev) => !prev);
+  };
 
   return (
     <HeaderContainer>
-      <LogoImage>TRENDIK.</LogoImage>
-      <SearchBox isFocused={isFocused}>
-        <LabelTag htmlFor="search">
+      {isOpened && <BackGroundModal closeModal={closeModal} />}
+      {isOpened && <UserModal />}
+      <Logo>TRENDIK.</Logo>
+      <SearchBox $focused={isFocused.toString()}>
+        <Label htmlFor="search">
           <SearchIcon />
-        </LabelTag>
+        </Label>
         <SearchInput
           id="search"
           type="text"
           placeholder="Search in Trendik"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          autocomplete="off"
+          autoComplete="off"
         />
       </SearchBox>
       <ButtonBox>
-        <LogInButton>로그인</LogInButton>
-        <SignUpButton>회원가입</SignUpButton>
+        <LogInButton onClick={openModal}>LOG IN</LogInButton>
+        <SignUpButton>SIGN UP</SignUpButton>
         <MagazineButton>Magazine</MagazineButton>
         <SubmitButton>Submit Look</SubmitButton>
       </ButtonBox>
@@ -39,9 +54,12 @@ const HeaderContainer = styled.header`
   padding: 0 5rem;
 `;
 
-const LogoImage = styled.h1`
+const Logo = styled.h1`
   font-size: 2.5rem;
   font-weight: 700;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const SearchBox = styled.div`
@@ -52,11 +70,12 @@ const SearchBox = styled.div`
   padding: 0 2rem;
   height: 4.8rem;
   border-radius: 1rem;
-  background-color: ${({ isFocused }) => (isFocused ? '#323232' : '#d5d5d5')};
+  background-color: ${({ $focused }) =>
+    $focused === 'true' ? '#323232' : '#d5d5d5'};
   transition: background-color 0.5s;
 `;
 
-const LabelTag = styled.label`
+const Label = styled.label`
   &:hover {
     cursor: pointer;
   }
@@ -104,11 +123,11 @@ const MagazineButton = styled.div`
   background-color: #222222;
   color: #e3e3e3;
   font-size: 1.6rem;
+  transition: 0.5s;
   &:hover {
     cursor: pointer;
-    background-color: #d2d2d2;
-    color: #222222;
-    transition: background-color 0.5s, color 0.5s;
+    background-color: #d5d5d5;
+    color: #777777;
   }
 `;
 
@@ -119,7 +138,6 @@ const SubmitButton = styled(MagazineButton)`
   &:hover {
     background-color: #222222;
     color: #e3e3e3;
-    transition: background-color 0.5s, color 0.5s;
   }
 `;
 
