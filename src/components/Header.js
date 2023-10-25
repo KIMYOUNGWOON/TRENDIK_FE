@@ -2,26 +2,32 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { VscSearch } from 'react-icons/vsc';
 import BackGroundModal from './BackGroundModal';
-import UserModal from './UserModal';
+import UserFormModal from './UserFormModal';
+import SuccessModal from './SuccessModal';
 
 function Header() {
   const [isOpened, setIsOpened] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [authForm, setAuthForm] = useState('login');
 
-  const openModal = () => {
+  const openModal = (auth) => {
     document.body.style.overflow = 'hidden';
     setIsOpened((prev) => !prev);
+    setAuthForm(auth);
   };
 
   const closeModal = () => {
-    document.body.style.overflow = 'auto';
+    document.body.style.overflowY = 'scroll';
     setIsOpened((prev) => !prev);
   };
 
   return (
     <HeaderContainer>
       {isOpened && <BackGroundModal closeModal={closeModal} />}
-      {isOpened && <UserModal />}
+      {isOpened && (
+        <UserFormModal authForm={authForm} setAuthForm={setAuthForm} />
+      )}
+      <SuccessModal />
       <Logo>TRENDIK.</Logo>
       <SearchBox $focused={isFocused.toString()}>
         <Label htmlFor="search">
@@ -37,8 +43,10 @@ function Header() {
         />
       </SearchBox>
       <ButtonBox>
-        <LogInButton onClick={openModal}>LOG IN</LogInButton>
-        <SignUpButton>SIGN UP</SignUpButton>
+        <LogInButton onClick={() => openModal('login')}>로그인</LogInButton>
+        <SignUpButton onClick={() => openModal('signup')}>
+          회원가입
+        </SignUpButton>
         <MagazineButton>Magazine</MagazineButton>
         <SubmitButton>Submit Look</SubmitButton>
       </ButtonBox>

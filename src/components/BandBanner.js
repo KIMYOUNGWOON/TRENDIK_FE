@@ -4,7 +4,7 @@ import { styled, keyframes } from 'styled-components';
 function BandBanner() {
   return (
     <Container>
-      <TextElement></TextElement>
+      <MoveElement></MoveElement>
     </Container>
   );
 }
@@ -26,7 +26,7 @@ const Container = styled.div`
   white-space: nowrap;
 `;
 
-const TextElement = styled.div`
+const MoveElement = styled.div`
   display: inline-block;
   color: #ffffff;
   font-size: 2rem;
