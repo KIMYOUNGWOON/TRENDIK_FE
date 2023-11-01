@@ -1,11 +1,13 @@
 import { styled } from 'styled-components';
-import useInput from '../hooks/useInput';
-import instance from '../api/instance';
-import AUTH_FORM from '../data/authForm';
+import useInput from '../../hooks/useInput';
+import instance from '../../api/instance';
+import AUTH_FORM from '../../data/authForm';
+import { useState } from 'react';
 
-function Login() {
+function Login({ setIsProcessed }) {
   const initialValue = { email: '', password: '' };
   const [inputValue, handleChange] = useInput(initialValue);
+  const [errorMessage, setErrorMessage] = useState('');
   const isRequired = Object.values(inputValue).every((value) => value);
 
   const signIn = async (event) => {
@@ -15,23 +17,33 @@ function Login() {
         email: inputValue.email,
         password: inputValue.password,
       });
-      console.log(response);
+
+      const { status, data } = response;
+
+      if (status === 200) {
+        localStorage.setItem('userName', data.userName);
+        localStorage.setItem('accessToken', data.accessToken);
+        setIsProcessed((prev) => !prev);
+      }
     } catch (err) {
-      console.log(err);
+      if (err.response) {
+        setErrorMessage(err.response.data.message);
+      }
     }
   };
 
   return (
     <LoginContainer>
       <LoginText>로그인</LoginText>
+      <ErrorText>{errorMessage}</ErrorText>
       <Form onSubmit={signIn}>
-        {AUTH_FORM.login.map((el, index) => {
+        {AUTH_FORM.login.map((el) => {
           return (
             <InputWrapper key={el.id}>
-              <Label htmlFor={el.id}>• {el.name}</Label>
+              <Label htmlFor={el.name}>• {el.name.toUpperCase()}</Label>
               <Input
-                id={el.id}
-                name={el.id}
+                id={el.name}
+                name={el.name}
                 type={el.type}
                 placeholder={el.placeholder}
                 value={inputValue[el.id]}
@@ -58,7 +70,13 @@ const LoginContainer = styled.div``;
 
 const LoginText = styled.h2`
   font-size: 3rem;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
+`;
+
+const ErrorText = styled.h2`
+  font-size: 1.8rem;
+  margin-bottom: 4rem;
+  color: #fa5e2c;
 `;
 
 const Form = styled.form``;

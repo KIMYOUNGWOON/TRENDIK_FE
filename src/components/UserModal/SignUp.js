@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { styled } from 'styled-components';
-import useInput from '../hooks/useInput';
-import instance from '../api/instance';
-import AUTH_FORM from '../data/authForm';
+import useInput from '../../hooks/useInput';
+import instance from '../../api/instance';
+import AUTH_FORM from '../../data/authForm';
 
-function SignUp() {
+function SignUp({ setIsProcessed, scrollToTop }) {
   const initialValue = {
     userName: '',
     email: '',
@@ -11,6 +12,7 @@ function SignUp() {
     repeatPassword: '',
     requiredAgree: false,
   };
+  const [errorMessage, setErrorMessage] = useState('');
   const [inputValue, handleChange] = useInput(initialValue);
   const isRequired = Object.values(inputValue).every((value) => value);
 
@@ -19,28 +21,37 @@ function SignUp() {
     try {
       const response = await instance.post('/users/signup', {
         userName: inputValue.userName,
+        profileName: inputValue.profileName,
         email: inputValue.email,
         password: inputValue.password,
         repeatPassword: inputValue.repeatPassword,
         requiredAgree: inputValue.requiredAgree,
       });
-      console.log(response);
+
+      if (response.status === 201) {
+        setIsProcessed((prev) => !prev);
+      }
     } catch (err) {
-      console.log(err);
+      if (err.response) {
+        const { message } = err.response.data;
+        setErrorMessage(message);
+        scrollToTop();
+      }
     }
   };
 
   return (
     <SignUpContainer>
       <SignUpText>회원가입</SignUpText>
+      <ErrorText>{errorMessage}</ErrorText>
       <Form onSubmit={signUp}>
-        {AUTH_FORM.signup.map((el, index) => {
+        {AUTH_FORM.signup.map((el) => {
           return (
             <InputWrapper key={el.id}>
-              <Label htmlFor={el.id}>• {el.name}</Label>
+              <Label htmlFor={el.name}>• {el.name.toUpperCase()}</Label>
               <Input
-                id={el.id}
-                name={el.id}
+                id={el.name}
+                name={el.name}
                 type={el.type}
                 placeholder={el.placeholder}
                 value={inputValue[el.id]}
@@ -80,6 +91,12 @@ const SignUpContainer = styled.div``;
 const SignUpText = styled.h2`
   font-size: 3rem;
   margin-bottom: 5rem;
+`;
+
+const ErrorText = styled.h2`
+  font-size: 1.8rem;
+  margin-bottom: 4rem;
+  color: #fa5e2c;
 `;
 
 const Form = styled.form``;

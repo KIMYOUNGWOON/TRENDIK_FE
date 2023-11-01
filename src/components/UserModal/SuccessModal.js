@@ -1,22 +1,54 @@
 import { styled } from 'styled-components';
 
-function SuccessModal() {
+function SuccessModal({ modalType, setModalType, setIsProcessed, closeModal }) {
+  const userName = localStorage.getItem('userName');
   return (
     <SuccessModalContainer>
       <WelcomeText>WELCOME!</WelcomeText>
       <Logo>TRENDIK.</Logo>
       <Emoticon
-        src="https://user-images.githubusercontent.com/126956430/278058197-6d742c13-313c-4e33-aa12-57dee9a8f41b.png"
+        src={
+          modalType === 'login'
+            ? 'https://user-images.githubusercontent.com/126956430/278058197-6d742c13-313c-4e33-aa12-57dee9a8f41b.png'
+            : 'https://user-images.githubusercontent.com/126956430/278058189-4e58784e-b6ed-42bf-a721-beb8ee650a94.png'
+        }
         alt="이모티콘"
       ></Emoticon>
-      <SuccessText>회원가입이 완료되었습니다.</SuccessText>
-      <SubText>
-        트렌딕의 다양한 콘텐츠를 경험하실 수 있습니다. <br />
-        회원가입 시 등록한 이메일로 로그인하세요.
-      </SubText>
+      <SuccessText>
+        {modalType === 'login'
+          ? '로그인 되었습니다.'
+          : '회원가입이 완료되었습니다.'}
+      </SuccessText>
+      {modalType === 'login' ? (
+        <SubText>
+          {userName}님 환영합니다. <br />
+          트렌딕의 다양한 콘텐츠를 경험해보세요.
+        </SubText>
+      ) : (
+        <SubText>
+          트렌딕의 다양한 콘텐츠를 경험하실 수 있습니다. <br />
+          회원가입 시 등록한 이메일로 로그인하세요.
+        </SubText>
+      )}
+
       <ButtonWrapper>
-        <HomeButton>메인으로 이동</HomeButton>
-        <LoginButton>로그인 하기</LoginButton>
+        <HomeButton
+          onClick={() => {
+            closeModal();
+          }}
+        >
+          메인으로 이동
+        </HomeButton>
+        {modalType === 'signup' && (
+          <LoginButton
+            onClick={() => {
+              setModalType('login');
+              setIsProcessed((prev) => !prev);
+            }}
+          >
+            로그인 하기
+          </LoginButton>
+        )}
       </ButtonWrapper>
     </SuccessModalContainer>
   );
@@ -37,9 +69,6 @@ const SuccessModalContainer = styled.div`
   padding: 5rem;
   background-color: #ffffff;
   border-radius: 1rem;
-  box-shadow: 5px 6px 15px -4px rgba(0, 0, 0, 0.75);
-  -webkit-box-shadow: 5px 6px 15px -4px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 5px 6px 15px -4px rgba(0, 0, 0, 0.75);
 `;
 
 const WelcomeText = styled.div`

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import Main from './Main/Main';
+import Router from './Router';
 
 const GlobalStyles = createGlobalStyle`
   ${reset} 
@@ -21,7 +21,7 @@ function App() {
   return (
     <>
       <GlobalStyles />
-      <Main />
+      <Router />
     </>
   );
 }

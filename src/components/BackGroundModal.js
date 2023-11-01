@@ -23,6 +23,7 @@ const Container = styled.div`
   inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
   animation: ${opacityAnimation} 1s;
+  z-index: 1;
 `;
 
 const CloseButton = styled.div`
@@ -30,7 +31,7 @@ const CloseButton = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
-  top: 13rem;
+  bottom: 3rem;
   right: 5rem;
   width: 6rem;
   height: 6rem;

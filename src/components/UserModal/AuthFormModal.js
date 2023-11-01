@@ -1,11 +1,21 @@
-import { keyframes, styled } from 'styled-components';
+import { useRef } from 'react';
+import { styled } from 'styled-components';
 import SignUp from './SignUp';
 import Login from './Login';
 import SocialLogin from './SocialLogin';
 
-function UserFormModal({ authForm, setAuthForm }) {
+function AuthFormModal({ modalType, setModalType, setIsProcessed }) {
+  const scrollRef = useRef();
+  const scrollToTop = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  };
   return (
-    <UserFormModalContainer>
+    <AuthFormModalContainer>
       <LeftContainer>
         <WelcomeText>
           WELCOME
@@ -16,18 +26,19 @@ function UserFormModal({ authForm, setAuthForm }) {
           <Logo>TRENDIK.</Logo>
           <Emoticon
             src={
-              authForm === 'login'
+              modalType === 'login'
                 ? 'https://user-images.githubusercontent.com/126956430/278058197-6d742c13-313c-4e33-aa12-57dee9a8f41b.png'
                 : 'https://user-images.githubusercontent.com/126956430/278058189-4e58784e-b6ed-42bf-a721-beb8ee650a94.png'
             }
           ></Emoticon>
         </Wrapper>
-        {authForm === 'login' ? (
+        {modalType === 'login' ? (
           <CheckMember>
             Not a member yet?{' '}
             <Span
               onClick={() => {
-                setAuthForm('signup');
+                setModalType('signup');
+                scrollToTop();
               }}
             >
               Sign Up Now
@@ -38,7 +49,8 @@ function UserFormModal({ authForm, setAuthForm }) {
             Are you a member?{' '}
             <Span
               onClick={() => {
-                setAuthForm('login');
+                setModalType('login');
+                scrollToTop();
               }}
             >
               Login Now
@@ -46,24 +58,19 @@ function UserFormModal({ authForm, setAuthForm }) {
           </CheckMember>
         )}
       </LeftContainer>
-      <RightContainer>
-        {authForm === 'login' ? <Login /> : <SignUp />}
+      <RightContainer ref={scrollRef}>
+        {modalType === 'login' ? (
+          <Login setIsProcessed={setIsProcessed} />
+        ) : (
+          <SignUp setIsProcessed={setIsProcessed} scrollToTop={scrollToTop} />
+        )}
         <SocialLogin />
       </RightContainer>
-    </UserFormModalContainer>
+    </AuthFormModalContainer>
   );
 }
 
-const opacityAnimation = keyframes`
-  from {
-    opacity : 0
-  }
-  to {
-    opacity : 1
-  }
-`;
-
-const UserFormModalContainer = styled.div`
+const AuthFormModalContainer = styled.div`
   display: flex;
   position: absolute;
   width: 114rem;
@@ -71,7 +78,6 @@ const UserFormModalContainer = styled.div`
   top: 16%;
   left: 50%;
   transform: translateX(-50%);
-  animation: ${opacityAnimation} 1s;
 `;
 
 const LeftContainer = styled.div`
@@ -129,4 +135,4 @@ const RightContainer = styled.div`
   overflow-y: scroll;
 `;
 
-export default UserFormModal;
+export default AuthFormModal;

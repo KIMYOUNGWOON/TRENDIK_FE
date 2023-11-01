@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { VscSearch } from 'react-icons/vsc';
 import BackGroundModal from './BackGroundModal';
-import UserFormModal from './UserFormModal';
-import SuccessModal from './SuccessModal';
+import UserModal from './UserModal/UserModal';
 
 function Header() {
   const [isOpened, setIsOpened] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [authForm, setAuthForm] = useState('login');
+  const [modalType, setModalType] = useState('login');
+  const token = localStorage.getItem('accessToken');
 
-  const openModal = (auth) => {
-    document.body.style.overflow = 'hidden';
+  const openModal = (type) => {
+    document.body.style.overflowY = 'hidden';
     setIsOpened((prev) => !prev);
-    setAuthForm(auth);
+    setModalType(type);
   };
 
   const closeModal = () => {
@@ -21,13 +21,22 @@ function Header() {
     setIsOpened((prev) => !prev);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userName');
+    openModal('logout');
+  };
+
   return (
     <HeaderContainer>
       {isOpened && <BackGroundModal closeModal={closeModal} />}
       {isOpened && (
-        <UserFormModal authForm={authForm} setAuthForm={setAuthForm} />
+        <UserModal
+          modalType={modalType}
+          setModalType={setModalType}
+          closeModal={closeModal}
+        />
       )}
-      <SuccessModal />
       <Logo>TRENDIK.</Logo>
       <SearchBox $focused={isFocused.toString()}>
         <Label htmlFor="search">
@@ -43,10 +52,16 @@ function Header() {
         />
       </SearchBox>
       <ButtonBox>
-        <LogInButton onClick={() => openModal('login')}>로그인</LogInButton>
-        <SignUpButton onClick={() => openModal('signup')}>
-          회원가입
-        </SignUpButton>
+        {!token && (
+          <LogInButton onClick={() => openModal('login')}>로그인</LogInButton>
+        )}
+        {!token && (
+          <SignUpButton onClick={() => openModal('signup')}>
+            회원가입
+          </SignUpButton>
+        )}
+        {token && <MyPageButton>마이페이지</MyPageButton>}
+        {token && <LogOutButton onClick={handleLogout}>로그아웃</LogOutButton>}
         <MagazineButton>Magazine</MagazineButton>
         <SubmitButton>Submit Look</SubmitButton>
       </ButtonBox>
@@ -65,6 +80,7 @@ const HeaderContainer = styled.header`
 const Logo = styled.h1`
   font-size: 2.5rem;
   font-weight: 700;
+  color: #222222;
   &:hover {
     cursor: pointer;
   }
@@ -113,6 +129,22 @@ const ButtonBox = styled.div`
   align-items: center;
   gap: 2rem;
   margin-left: 4rem;
+`;
+
+const MyPageButton = styled.div`
+  font-size: 1.4rem;
+  color: #222222;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const LogOutButton = styled.div`
+  font-size: 1.4rem;
+  color: #222222;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const LogInButton = styled.div`
