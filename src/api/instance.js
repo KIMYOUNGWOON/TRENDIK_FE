@@ -5,4 +5,19 @@ const instance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+instance.interceptors.request.use(
+  (config) => {
+    // 요청 전에 수행할 작업
+    if (config.url === '/users/my') {
+      const accessToken = localStorage.getItem('accessToken');
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export default instance;

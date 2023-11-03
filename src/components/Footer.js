@@ -84,7 +84,8 @@ const FooterTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 5rem;
-  padding-bottom: 5rem;
+  padding: 5rem 0;
+  border-top: 1px solid #d5d5d5;
   border-bottom: 1px solid #d5d5d5;
 `;
 

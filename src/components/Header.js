@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { VscSearch } from 'react-icons/vsc';
 import BackGroundModal from './BackGroundModal';
@@ -9,6 +10,7 @@ function Header() {
   const [isFocused, setIsFocused] = useState(false);
   const [modalType, setModalType] = useState('login');
   const token = localStorage.getItem('accessToken');
+  const navigate = useNavigate();
 
   const openModal = (type) => {
     document.body.style.overflowY = 'hidden';
@@ -25,6 +27,7 @@ function Header() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userName');
     openModal('logout');
+    navigate('/');
   };
 
   return (
@@ -37,7 +40,13 @@ function Header() {
           closeModal={closeModal}
         />
       )}
-      <Logo>TRENDIK.</Logo>
+      <Logo
+        onClick={() => {
+          navigate('/');
+        }}
+      >
+        TRENDIK.
+      </Logo>
       <SearchBox $focused={isFocused.toString()}>
         <Label htmlFor="search">
           <SearchIcon />
@@ -60,7 +69,15 @@ function Header() {
             회원가입
           </SignUpButton>
         )}
-        {token && <MyPageButton>마이페이지</MyPageButton>}
+        {token && (
+          <MyPageButton
+            onClick={() => {
+              navigate('/my');
+            }}
+          >
+            마이페이지
+          </MyPageButton>
+        )}
         {token && <LogOutButton onClick={handleLogout}>로그아웃</LogOutButton>}
         <MagazineButton>Magazine</MagazineButton>
         <SubmitButton>Submit Look</SubmitButton>

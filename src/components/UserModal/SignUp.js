@@ -7,6 +7,7 @@ import AUTH_FORM from '../../data/authForm';
 function SignUp({ setIsProcessed, scrollToTop }) {
   const initialValue = {
     userName: '',
+    profileName: '',
     email: '',
     password: '',
     repeatPassword: '',

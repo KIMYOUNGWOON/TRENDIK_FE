@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 function Logout({ closeModal }) {
@@ -20,7 +21,7 @@ function Logout({ closeModal }) {
             closeModal();
           }}
         >
-          메인으로 이동
+          확인
         </HomeButton>
       </ButtonWrapper>
     </LogoutContainer>

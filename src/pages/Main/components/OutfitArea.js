@@ -72,13 +72,16 @@ function OutfitArea() {
                     {item.isLiked ? (
                       <FillLikeButton
                         onClick={() => {
-                          dispatch({ type: 'DISLIKE', payload: item.id });
+                          dispatch({
+                            type: 'LIKE_CANCEL',
+                            payload: { id: item.id },
+                          });
                         }}
                       />
                     ) : (
                       <EmptyLikeButton
                         onClick={() => {
-                          dispatch({ type: 'LIKE', payload: item.id });
+                          dispatch({ type: 'LIKE', payload: { id: item.id } });
                         }}
                       />
                     )}
@@ -190,7 +193,7 @@ const SlideItem = styled.li`
   transition: 0.5s;
   &:hover {
     cursor: pointer;
-    transform: scale(0.96);
+    transform: scale(0.98);
     background-color: #7c7c7c;
     ${Background} {
       background-color: rgba(0, 0, 0, 0.3);

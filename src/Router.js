@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import MoveTop from './components/MoveTop';
 import Main from './pages/Main/Main';
+import MyPage from './pages/MyPage/MyPage';
 import NotFound from './pages/NotFound';
 // import store from './store';
 // import { Provider } from 'react-redux';
@@ -16,6 +17,7 @@ function Router() {
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="my" element={<MyPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <MoveTop />

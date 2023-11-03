@@ -99,7 +99,7 @@ const UrlFragmentTitle = styled.li`
 `;
 
 const UrlFragment = styled.li`
-  padding: 0 1.6rem;
+  flex: 1 auto;
   border: 1px solid #4e4e4e;
   border-radius: 0.8rem;
   transition: 0.5s;
@@ -110,10 +110,10 @@ const UrlFragment = styled.li`
 `;
 
 const Link = styled(HashLink)`
-  display: flex;
-  align-items: center;
+  display: block;
   width: 100%;
   height: 100%;
+  padding: 1.6rem;
   color: #cbcbcb;
   text-decoration: none;
   font-size: 1.2rem;
